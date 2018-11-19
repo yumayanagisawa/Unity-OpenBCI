@@ -267,6 +267,7 @@ GameObject:
   - component: {fileID: 1697473677}
   - component: {fileID: 1697473676}
   - component: {fileID: 1697473675}
+  - component: {fileID: 1697473679}
   m_Layer: 0
   m_Name: Quad
   m_TagString: Untagged
@@ -343,6 +344,31 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1697473679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1697473674}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fe3e8e7626694d9998f727aee0fba41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _oscAddress: /
+  _oscAddresses:
+  - /
+  _receiveAllAddresses: 1
+  _useExplicitConnection: 0
+  _explicitConnection: {fileID: 0}
+  _oscPort: 12345
+  _receiveAllPorts: 0
+  _redrawFlag: 0
+  _foldoutList: []
+  transformToMove: {fileID: 1697473678}
+  nearClipPlaneOffset: 1
+  movementMode: 0
+  pulseObj: {fileID: 1711222684}
 --- !u!1 &1711222684
 GameObject:
   m_ObjectHideFlags: 0
@@ -354,7 +380,6 @@ GameObject:
   - component: {fileID: 1711222687}
   - component: {fileID: 1711222686}
   - component: {fileID: 1711222685}
-  - component: {fileID: 1711222690}
   m_Layer: 0
   m_Name: Quad Pulse
   m_TagString: Untagged
@@ -431,29 +456,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1711222690
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1711222684}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fe3e8e7626694d9998f727aee0fba41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _oscAddress: /openbci
-  _oscAddresses: []
-  _receiveAllAddresses: 0
-  _useExplicitConnection: 0
-  _explicitConnection: {fileID: 0}
-  _oscPort: 12346
-  _receiveAllPorts: 0
-  _redrawFlag: 0
-  _foldoutList: []
-  transformToMove: {fileID: 1711222688}
-  nearClipPlaneOffset: 1
-  movementMode: 0
 --- !u!1 &1966321463
 GameObject:
   m_ObjectHideFlags: 0
@@ -497,7 +499,7 @@ MonoBehaviour:
   _isValidOscOutMulticastIPAddress: 1
   _oscOutMulticastIPAddress: 224.0.1.0
   _oscOutPort: 9000
-  redrawFlag: 0
+  redrawFlag: 1
   dispatchOSC: 0
   dispatchOSCOut: 0
   oscMappingFileObjList: []
@@ -636,7 +638,7 @@ MonoBehaviour:
   _isValidOscOutMulticastIPAddress: 1
   _oscOutMulticastIPAddress: 224.0.1.0
   _oscOutPort: 9000
-  redrawFlag: 1
+  redrawFlag: 0
   dispatchOSC: 0
   dispatchOSCOut: 0
   oscMappingFileObjList: []
