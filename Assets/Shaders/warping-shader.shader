@@ -1,6 +1,8 @@
 ﻿Shader "Custom/warp-shader" {
     Properties{
-        _Multi("Mul", Range(0, 10)) = 1.725
+        _TimeSeries_1("TimeSeries_1", Range(0, 10)) = 1.725
+        _TimeSeries_2("TimeSeries_2", Range(0, 10)) = 1.725
+        _TimeSeries_3("TimeSeries_3", Range(0, 10)) = 1.725
     }
     SubShader{
         Tags{ "RenderType" = "Opaque" }
@@ -12,7 +14,9 @@
 
         #include "UnityCG.cginc"
         
-        float _Multi;
+        float _TimeSeries_1;
+        float _TimeSeries_2;
+        float _TimeSeries_3;
         
         fixed2 hash(fixed2 p) {
             p = fixed2(dot(p, fixed2(127.1, 311.7)), dot(p, fixed2(269.5, 183.3)));
@@ -48,6 +52,7 @@
             p = mul(p, m)*2.03;
             f += 0.1250*noise(p);
             p = mul(p, m)*2.01;
+            //p = mul(p, m)*_TimeSeries_1;
             f += 0.0625*noise(p);
             return f;
         }
@@ -64,7 +69,8 @@
             f += 0.0625*noise(p);
             p = mul(p, m)*2.04;
             f += 0.031250*noise(p);
-            p = mul(p, m)*2.01;
+            //p = mul(p, m)*2.01;
+            p = mul(p, m)*_TimeSeries_1;
             f += 0.015625*noise(p);
             return f;
         }
@@ -74,11 +80,12 @@
             float f = 0.0;
             f += 0.5000*abs(noise(p)); p = mul(p, m)*2.02;
             f += 0.2500*abs(noise(p)); p = mul(p, m)*2.03;
-            f += 0.1250*abs(noise(p)); p = mul(p, m)*2.01;
+            //f += 0.1250*abs(noise(p)); p = mul(p, m)*2.01;
+            f += 0.1250*abs(noise(p)); p = mul(p, m)*_TimeSeries_1;
             f += 0.0625*abs(noise(p));
             return f;
         }
-
+        
         float turb6(in fixed2 p)
         {
             float f = 0.0;
@@ -86,7 +93,8 @@
             f += 0.2500*abs(noise(p)); p = mul(p, m)*2.03;
             f += 0.1250*abs(noise(p)); p = mul(p, m)*2.01;
             f += 0.0625*abs(noise(p)); p = mul(p, m)*2.04;
-            f += 0.031250*abs(noise(p)); p = mul(p, m)*2.01;
+            //f += 0.031250*abs(noise(p)); p = mul(p, m)*2.01;
+            f += 0.031250*abs(noise(p)); p = mul(p, m)*_TimeSeries_1;
             f += 0.015625*abs(noise(p));
             return f;
         }
@@ -105,18 +113,18 @@
         float dowarp(in fixed2 q, out fixed2 a, out fixed2 b)
         {
             float ang = 0.;
-            //ang = 1.2345 * sin(0.015*_Time.y);
-            ang = 1.2345 * sin(0.015*_Time.y) * _Multi;
+            ang = 1.2345 * sin(0.015*_Time.y);
+            //ang = 1.2345 * sin(0.015*_Time.y) * _TimeSeries_1;
             float2x2 m1 = float2x2(cos(ang), sin(ang), -sin(ang), cos(ang));
-            //ang = 0.2345 * sin(0.021*_Time.y);
-            ang = 0.2345 * sin(0.021*_Time.y) * _Multi;
+            ang = 0.2345 * sin(0.021*_Time.y);
+            //ang = 0.2345 * sin(0.021*_Time.y) * _TimeSeries_1;
             float2x2 m2 = float2x2(cos(ang), sin(ang), -sin(ang), cos(ang));
 
             a = fixed2(marble(mul(q,m1)), marble(mul(q,m2) + fixed2(1.12, 0.654)));
 
-            ang = 0.543 * cos(0.011*_Time.y);
+            ang = 0.543 * cos(0.011*_Time.y * -_TimeSeries_2);
             m1 = float2x2(cos(ang), sin(ang), -sin(ang), cos(ang));
-            ang = 1.128 * cos(0.018*_Time.y);
+            ang = 1.128 * cos(0.018*_Time.y * -_TimeSeries_3);
             m2 = float2x2(cos(ang), sin(ang), -sin(ang), cos(ang));
 
             //b = fixed2(marble(m2*(q + a)), marble(m1*(q + a)));
@@ -132,12 +140,13 @@
             fixed2 q = 2.*uv - 1.;
             q.y = mul(q.y, (_ScreenParams.y / _ScreenParams.x));
 
-            float Time = 0.1;// 0.1*_Time.y;
+            float Time = 0.1*_Time.y;
             //q += fixed2(4.0*sin(Time), 0.);
-            q += fixed2(4.0*sin(Time), 0.);
+            q += fixed2(4.0*sin(0), 0.);
             //q *= 1.725;
             //q = mul(q, 1.725);
-            q = mul(q, _Multi);
+            q = mul(q, 5);
+            //q = mul(q, _TimeSeries_1);
 
             fixed2 a = fixed2(0., 0.);
             fixed2 b = fixed2(0., 0.);
@@ -151,7 +160,7 @@
             c = abs(a.x);
             col -= fixed3(c*c, c, c*c*c);
             c = abs(b.x);
-            col += fixed3(c*c*c, c*c, c);
+            col += fixed3(c*c*c+(_TimeSeries_1 * 0.025f), c*c-(_TimeSeries_2 * 0.025f), c-(_TimeSeries_3 * 0.025f));
             //col *= 0.7;
             //col = mul(col, 0.7);
             col = mul(col, 0.7);

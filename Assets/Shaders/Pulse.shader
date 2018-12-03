@@ -87,6 +87,8 @@
                     //nsin(t + cos(t - 2452.2356) + 1234.0)
                 ) * _ScreenParams.xy;
             }
+            
+            float _TimeFromCSharp;
 			
 			fixed4 frag(v2f_img i) : SV_Target
 			{
@@ -101,18 +103,21 @@
                 #endif
                 
                 float timescale = _Pulse/60;
-                float t = frac(_Time.y * timescale);
+                float t = frac(_TimeFromCSharp * timescale);
+                
+                //float timescale = 48.0/60.0;
+                //float t = fract((0.19 / timescale) * timescale);
                 
                 //vec2 center = (iMouse.z > 0.0) ? iMouse.xy : get_center(coord, iTime * timescale);
                 float2 center = get_center((i.uv * _ScreenParams.xy), _Time.y * timescale);
                 
                 #if CHEAP_NORMALS
                 //float height = create_ripple((i.uv * _ScreenParams.xy), center, t * 100.0 + 1.0, 300.0, 300.0, 300.0);
-                float height = create_ripple((i.uv * _ScreenParams.xy), center, t * 40.0 + 1.0, 200.0, 400.0, 200.0);
+                float height = create_ripple((i.uv * _ScreenParams.xy), center, t * 40.0 + 1.0, 0.35 * _ScreenParams.y, 400.0, 200.0);
                 //float2 normals = float2(dFdx(height), dFdy(height));
                 float2 normals = float2(ddx(height), ddy(height));
                 #else
-                float2 normals = get_normals((i.uv * _ScreenParams.xy), center, t * 100.0 + 1.0, 300.0, 300.0, 300.0);
+                float2 normals = get_normals((i.uv * _ScreenParams.xy), center, t * 100.0 + 1.0, 0.35 * _ScreenParams.y, 300.0, 300.0);
                 #endif
                 
                 #if VIEW_HEIGHT
